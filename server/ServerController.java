@@ -42,6 +42,15 @@ public class ServerController implements Initializable {
             client.setText(clientSocket.getInetAddress().getHostAddress());
         } catch (Exception e) {
             System.out.println("Server Error");
+            error.setOpacity(1);
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    error.setOpacity(0);
+                }
+            }, 1, TimeUnit.SECONDS);
+            scheduler.shutdown();                               
         }
     }
 
