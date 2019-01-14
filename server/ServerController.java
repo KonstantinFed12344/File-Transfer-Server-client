@@ -22,6 +22,7 @@ public class ServerController implements Initializable {
     private TextField host;
     @FXML
     private TextField port;
+    @FXML
     private TextField client;
     @FXML
     private Button connectButton;
@@ -38,6 +39,9 @@ public class ServerController implements Initializable {
             client.setText(clientSocket.getInetAddress().getHostAddress());
         } catch (Exception e) {
             System.out.println("Server Error");
+            error.setOpacity(1);
+            Thread.sleep(1000);
+            error.setOpacity(0);
         }
     }
 
@@ -50,7 +54,11 @@ public class ServerController implements Initializable {
             port.setText(Integer.toString(server.getLocalPort()));
             
         } catch (Exception e) {
-            System.out.println("Server Error");         
+            System.out.println("Error");
+            
+
         }
+
     }
+
 }
