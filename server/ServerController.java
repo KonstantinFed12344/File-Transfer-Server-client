@@ -8,6 +8,9 @@ package server;
 import java.net.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -52,6 +55,15 @@ public class ServerController implements Initializable {
 
         } catch (Exception e) {
             System.out.println("Server Error");
+            error.setOpacity(1);
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    error.setOpacity(0);
+                }
+            }, 1, TimeUnit.SECONDS);
+            scheduler.shutdown();
         }
     }
 }
