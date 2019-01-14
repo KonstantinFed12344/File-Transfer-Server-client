@@ -31,17 +31,13 @@ public class ClientController implements Initializable {
         try {
             socket = new Socket(InetAddress.getByName(host.getText()),Integer.parseInt(port.getText()));
         } catch (Exception e) {
-            error.setOpacity(1);
-            Thread.sleep(1000);
-            error.setOpacity(0);
-            
+            System.out.println("Client Error");            
         }
     }
     
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {  
         
-    }    
-    
+    }        
 }
