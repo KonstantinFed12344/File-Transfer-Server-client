@@ -39,9 +39,6 @@ public class ServerController implements Initializable {
             client.setText(clientSocket.getInetAddress().getHostAddress());
         } catch (Exception e) {
             System.out.println("Server Error");
-            error.setOpacity(1);
-            Thread.sleep(1000);
-            error.setOpacity(0);
         }
     }
 
@@ -52,13 +49,9 @@ public class ServerController implements Initializable {
             server = new ServerSocket(0, 1, InetAddress.getLocalHost());
             host.setText(server.getInetAddress().getHostAddress());
             port.setText(Integer.toString(server.getLocalPort()));
-            
+
         } catch (Exception e) {
-            System.out.println("Error");
-            
-
+            System.out.println("Server Error");
         }
-
     }
-
 }
