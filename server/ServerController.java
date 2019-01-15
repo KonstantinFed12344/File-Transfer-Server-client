@@ -5,8 +5,11 @@
  */
 package server;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,9 +34,14 @@ public class ServerController implements Initializable {
     private Button connectButton;
     @FXML
     private Label error;
+    @FXML
+    private ListView<String> fileList;
+    @FXML
+    private Button folder;
 
     private ServerSocket server;
     private Socket clientSocket;
+    private ArrayList<String> files;
 
     @FXML
     public void connect() throws InterruptedException {
@@ -42,20 +50,45 @@ public class ServerController implements Initializable {
             client.setText(clientSocket.getInetAddress().getHostAddress());
         } catch (Exception e) {
             System.out.println("Server Error");
-            error.setOpacity(1);
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    error.setOpacity(0);
-                }
-            }, 1, TimeUnit.SECONDS);
-            scheduler.shutdown();                               
+            this.errorMessage();
         }
+    }
+
+    private void errorMessage() {
+        error.setOpacity(1);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(new Runnable() {
+            @Override
+            public void run() {
+                error.setOpacity(0);
+            }
+        }, 1, TimeUnit.SECONDS);
+        scheduler.shutdown();
+    }
+
+    private void updateFileBank() {
+        File folder = new File("C:/FileBank");
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (!files.contains(listOfFiles[i].getName())) {
+                files.add(listOfFiles[i].getName());
+                fileList.getItems().add(listOfFiles[i].getName());
+            }
+        }
+    }
+    
+    @FXML
+    private void openFolder() throws IOException{
+        this.updateFileBank();
+        Runtime.getRuntime().exec("explorer.exe /select, C:\\FileBank\\");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        new File("C:/FileBank").mkdir();
+        files = new ArrayList<>();
+        this.updateFileBank();
 
         try {
             server = new ServerSocket(0, 1, InetAddress.getLocalHost());
@@ -64,15 +97,7 @@ public class ServerController implements Initializable {
 
         } catch (Exception e) {
             System.out.println("Server Error");
-            error.setOpacity(1);
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    error.setOpacity(0);
-                }
-            }, 1, TimeUnit.SECONDS);
-            scheduler.shutdown();
+            this.errorMessage();
         }
     }
 }
