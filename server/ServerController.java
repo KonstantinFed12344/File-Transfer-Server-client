@@ -81,7 +81,7 @@ public class ServerController implements Initializable {
     @FXML
     private void openFolder() throws IOException{
         this.updateFileBank();
-        Runtime.getRuntime().exec("explorer.exe /select, C:\\FileBank\\");
+        Runtime.getRuntime().exec("explorer.exe /open, C:\\FileBank");
     }
 
     @Override
