@@ -5,6 +5,7 @@
  */
 package client;
 
+import java.io.File;
 import java.net.*;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,19 +21,19 @@ import javafx.scene.control.*;
  * @author Konstantin
  */
 public class ClientController implements Initializable {
-    
+
     @FXML
     private TextField host;
     @FXML
     private TextField port;
     @FXML
     private Label error;
-    
+
     private Socket socket;
-    
+
     public void connect() throws InterruptedException {
         try {
-            socket = new Socket(InetAddress.getByName(host.getText()),Integer.parseInt(port.getText()));
+            socket = new Socket(InetAddress.getByName(host.getText()), Integer.parseInt(port.getText()));
         } catch (Exception e) {
             System.out.println("Client Error");
             error.setOpacity(1);
@@ -40,18 +41,17 @@ public class ClientController implements Initializable {
             scheduler.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    error.setOpacity(0);                  
+                    error.setOpacity(0);
                 }
             }, 1, TimeUnit.SECONDS);
             scheduler.shutdown();
-            
+
         }
     }
-    
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-    }    
-    
+        new File("C:/FileBankReceived").mkdir();
+    }
+
 }
