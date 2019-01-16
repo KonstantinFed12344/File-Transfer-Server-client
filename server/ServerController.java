@@ -5,8 +5,7 @@
  */
 package server;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class ServerController implements Initializable {
     @FXML
     private TextField client;
     @FXML
-    private Button connectButton;
+    private Button openServerButton;
     @FXML
     private Label error;
     @FXML
@@ -44,10 +43,18 @@ public class ServerController implements Initializable {
     private ArrayList<String> files;
 
     @FXML
-    public void connect() throws InterruptedException {
+    public void openServer() throws InterruptedException {
         try {
             clientSocket = server.accept();
             client.setText(clientSocket.getInetAddress().getHostAddress());
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            
+            for(String files : files){
+                System.out.println(files);
+                out.println(files);
+                out.flush();
+            }
+            out.close();
         } catch (Exception e) {
             System.out.println("Server Error");
             this.errorMessage();
@@ -73,7 +80,7 @@ public class ServerController implements Initializable {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (!files.contains(listOfFiles[i].getName())) {
                 files.add(listOfFiles[i].getName());
-                fileList.getItems().add(listOfFiles[i].getName());
+                fileList.getItems().add(listOfFiles[i].getName());                
             }
         }
     }
