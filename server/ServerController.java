@@ -10,6 +10,7 @@ import java.net.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -46,31 +47,16 @@ public class ServerController implements Initializable {
     @FXML
     public void openServer() throws InterruptedException {
         try {
-            //Portion that sends names of files from server to client like a dinner menu
             clientSocket = server.accept();
             client.setText(clientSocket.getInetAddress().getHostAddress());
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            clientFile = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            for (String files : files) {
-                System.out.println(files);
-                out.println(files);
-                out.flush();
-            }
-
-            //End of portion for file names
             
-            //In progress
-            ServerQueue task = new ServerQueue(clientFile);
-            task.run();
+            ServerQueue task = new ServerQueue(clientSocket, files);
+            ExecutorService executorService
+                    = Executors.newFixedThreadPool(1);
+            executorService.execute(task);
+            executorService.shutdown();
 
-            //String fileName;
-            //fileName = clientFile.readLine();
-            //System.out.println(fileName);
-            //In progress
-            
-            clientFile.close();
-            out.close();
-
+           
         } catch (Exception e) {
             System.out.println("Server Error");
             this.errorMessage();

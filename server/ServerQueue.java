@@ -6,6 +6,10 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
 import javafx.concurrent.Task;
 
 /**
@@ -14,15 +18,32 @@ import javafx.concurrent.Task;
  */
 public class ServerQueue extends Task<String> {
 
-    private BufferedReader clientFile;
+    private Socket clientSocket;
+    private ArrayList<String> files;
 
-    public ServerQueue(BufferedReader clientFile) {
-        this.clientFile = clientFile;
+    public ServerQueue(Socket clientSocket, ArrayList<String> files) {
+        this.clientSocket = clientSocket;
+        this.files = files;
     }
 
     @Override
     protected String call() throws Exception {
-        return clientFile.readLine();
+        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+        BufferedReader clientFile = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        for (String files : files) {
+            System.out.println(files);
+            out.println(files);
+            out.flush();
+        }
+
+        String fileName;
+        fileName = clientFile.readLine();
+        System.out.println(fileName);
+
+        out.close();
+        clientFile.close();
+
+        return null;
     }
 
 }
