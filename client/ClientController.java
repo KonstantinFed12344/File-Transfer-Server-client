@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,10 +41,24 @@ public class ClientController implements Initializable {
 
     private Socket socket;
     private ArrayList<String> files;
+    private boolean connected;
+    private PrintWriter out;
 
     @FXML
     private void openFolder() throws IOException {
         Runtime.getRuntime().exec("explorer.exe /open, C:\\FileBankReceived");
+    }
+
+    @FXML
+    private void download() throws IOException {
+        if (connected) {
+            File downloaded = new File(fileList.getSelectionModel().getSelectedItems().get(0));
+            System.out.println(fileList.getSelectionModel().getSelectedItems().get(0));
+            out.println(fileList.getSelectionModel().getSelectedItems().get(0));
+            out.flush();
+            
+        }
+
     }
 
     public void connect() throws InterruptedException {
@@ -54,11 +69,14 @@ public class ClientController implements Initializable {
             BufferedReader serverFiles = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             files = new ArrayList<>();
 
-            while ((fileNames = serverFiles.readLine()) != null) {
+            while ((fileNames = serverFiles.readLine()) != null) {//Adds file names to file scroller
                 files.add(fileNames);
                 //System.out.println(files.get(files.size()-1));
                 fileList.getItems().add(fileNames);
             }
+            
+            out = new PrintWriter(socket.getOutputStream(), true);
+            connected = true;
         } catch (Exception e) {
             System.out.println("Client Error");
             error.setOpacity(1);
@@ -77,6 +95,7 @@ public class ClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         new File("C:/FileBankReceived").mkdir();
+        connected = false;
     }
 
 }
