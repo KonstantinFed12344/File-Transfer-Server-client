@@ -15,9 +15,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -43,6 +47,7 @@ public class ClientController implements Initializable {
     private ArrayList<String> files;
     private boolean connected;
     private PrintWriter out;
+    private ClientQueue task;
 
     @FXML
     private void openFolder() throws IOException {
@@ -52,30 +57,31 @@ public class ClientController implements Initializable {
     @FXML
     private void download() throws IOException {
         if (connected) {
-            File downloaded = new File(fileList.getSelectionModel().getSelectedItems().get(0));
-            System.out.println(fileList.getSelectionModel().getSelectedItems().get(0));
-            out.println(fileList.getSelectionModel().getSelectedItems().get(0));
-            out.flush();
-            
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        task.serverDownload();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
         }
-
     }
 
     public void connect() throws InterruptedException {
         try {
 
             socket = new Socket(InetAddress.getByName(host.getText()), Integer.parseInt(port.getText()));
-            String fileNames = null;
-            BufferedReader serverFiles = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            files = new ArrayList<>();
 
-            while ((fileNames = serverFiles.readLine()) != null) {//Adds file names to file scroller
-                files.add(fileNames);
-                //System.out.println(files.get(files.size()-1));
-                fileList.getItems().add(fileNames);
-            }
-            
-            out = new PrintWriter(socket.getOutputStream(), true);
+            task = new ClientQueue(socket, files, fileList);
+            ExecutorService executorService
+                    = Executors.newFixedThreadPool(1);
+            executorService.execute(task);
+
+            executorService.shutdown();
+
             connected = true;
         } catch (Exception e) {
             System.out.println("Client Error");
