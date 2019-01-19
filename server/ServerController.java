@@ -41,24 +41,44 @@ public class ServerController implements Initializable {
     private ServerSocket server;
     private Socket clientSocket;
     private ArrayList<String> files;
+    private BufferedReader clientFile;
 
     @FXML
     public void openServer() throws InterruptedException {
         try {
+            //Portion that sends names of files from server to client like a dinner menu
             clientSocket = server.accept();
             client.setText(clientSocket.getInetAddress().getHostAddress());
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            
-            for(String files : files){
+            clientFile = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            for (String files : files) {
                 System.out.println(files);
                 out.println(files);
                 out.flush();
             }
+
+            //End of portion for file names
+            
+            //In progress
+            ServerQueue task = new ServerQueue(clientFile);
+            task.run();
+
+            //String fileName;
+            //fileName = clientFile.readLine();
+            //System.out.println(fileName);
+            //In progress
+            
+            clientFile.close();
             out.close();
+
         } catch (Exception e) {
             System.out.println("Server Error");
             this.errorMessage();
         }
+    }
+
+    public ServerSocket getServerSocket() {
+        return this.server;
     }
 
     private void errorMessage() {
@@ -80,13 +100,13 @@ public class ServerController implements Initializable {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (!files.contains(listOfFiles[i].getName())) {
                 files.add(listOfFiles[i].getName());
-                fileList.getItems().add(listOfFiles[i].getName());                
+                fileList.getItems().add(listOfFiles[i].getName());
             }
         }
     }
-    
+
     @FXML
-    private void openFolder() throws IOException{
+    private void openFolder() throws IOException {
         this.updateFileBank();
         Runtime.getRuntime().exec("explorer.exe /open, C:\\FileBank");
     }
