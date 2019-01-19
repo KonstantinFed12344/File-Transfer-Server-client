@@ -26,6 +26,9 @@ public class Server extends Application {
         
         stage.setScene(scene);
         stage.show();
+        stage.setOnHidden(close -> { 
+            System.exit(0);
+        });
     }
 
     /**

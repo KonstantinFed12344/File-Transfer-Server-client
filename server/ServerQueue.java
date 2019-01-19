@@ -16,7 +16,7 @@ import javafx.concurrent.Task;
  *
  * @author Konstantin
  */
-public class ServerQueue extends Task<String> {
+public class ServerQueue extends Task {
 
     private Socket clientSocket;
     private ArrayList<String> files;
@@ -37,13 +37,11 @@ public class ServerQueue extends Task<String> {
         }
 
         String fileName;
-        fileName = clientFile.readLine();
-        System.out.println(fileName);
+        while (true) {
+            fileName = clientFile.readLine();
+            System.out.println(fileName);
+        }
 
-        out.close();
-        clientFile.close();
-
-        return null;
     }
 
 }

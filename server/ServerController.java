@@ -49,14 +49,13 @@ public class ServerController implements Initializable {
         try {
             clientSocket = server.accept();
             client.setText(clientSocket.getInetAddress().getHostAddress());
-            
+
             ServerQueue task = new ServerQueue(clientSocket, files);
             ExecutorService executorService
                     = Executors.newFixedThreadPool(1);
             executorService.execute(task);
             executorService.shutdown();
 
-           
         } catch (Exception e) {
             System.out.println("Server Error");
             this.errorMessage();
