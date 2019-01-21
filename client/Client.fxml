@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
@@ -8,15 +9,18 @@
 
 <AnchorPane id="AnchorPane" prefHeight="323.0" prefWidth="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="client.ClientController">
   <children>
-    <Label layoutX="31.0" layoutY="23.0" prefHeight="19.0" prefWidth="40.0" text="Client" />
-    <Label layoutX="31.0" layoutY="60.0" text="Host: " />
-    <Label layoutX="31.0" layoutY="82.0" text="Port: " />
-    <TextField fx:id="host" disable="false" editable="true" layoutX="59.0" layoutY="57.0" prefWidth="200.0" text="" />
-    <TextField fx:id="port" disable="false" editable="true" layoutX="59.0" layoutY="79.0" opacity="1.0" prefWidth="200.0" />
+    <Label id="" layoutX="31.0" layoutY="23.0" prefHeight="19.0" prefWidth="150.0" styleClass="Title" text="Client" />
+    <Label layoutX="31.0" layoutY="60.0" prefWidth="50.0" text="Host: " />
+    <Label layoutX="31.0" layoutY="82.0" prefWidth="50.0" text="Port: " />
+    <TextField fx:id="host" disable="false" editable="true" layoutX="81.0" layoutY="57.0" prefWidth="200.0" text="" />
+    <TextField fx:id="port" disable="false" editable="true" layoutX="81.0" layoutY="79.0" opacity="1.0" prefWidth="200.0" />
     <Button id="connectButton" layoutX="45.0" layoutY="123.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
     <Label id="Error" fx:id="error" layoutX="199.0" layoutY="126.0" opacity="0.0" text="Error" />
     <ListView fx:id="fileList" layoutX="31.0" layoutY="154.0" prefHeight="118.0" prefWidth="266.0" />
     <Button fx:id="download" layoutX="34.0" layoutY="283.0" mnemonicParsing="false" onAction="#download" text="Download" />
     <Button fx:id="folder" layoutX="156.0" layoutY="283.0" mnemonicParsing="false" onAction="#openFolder" text="Open Folder" />
   </children>
+  <stylesheets>
+    <URL value="@Client.css" />
+  </stylesheets>
 </AnchorPane>

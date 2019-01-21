@@ -22,6 +22,8 @@ public class Client extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("Client.fxml"));
         
         Scene scene = new Scene(root);
+        //scene.getStylesheets().add("client.css");
+        
         
         stage.setScene(scene);
         stage.show();
