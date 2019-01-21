@@ -1,0 +1,10 @@
+.root{
+    -fx-font-size: 9pt;
+    -fx-font-family: "Arial Black";
+    -fx-base: rgb(33, 58, 132);
+    -fx-background: rgb(79, 103, 175);
+}
+
+.Title{
+	-fx-font-size: 11pt;
+}

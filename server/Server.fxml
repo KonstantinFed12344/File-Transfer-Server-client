@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
@@ -8,16 +9,19 @@
 
 <AnchorPane id="AnchorPane" prefHeight="332.0" prefWidth="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="server.ServerController">
   <children>
-    <Label layoutX="36.0" layoutY="14.0" prefHeight="19.0" prefWidth="40.0" text="Server" />
-    <Label layoutX="36.0" layoutY="51.0" text="Host: " />
-    <Label layoutX="36.0" layoutY="73.0" text="Port: " />
-    <TextField fx:id="host" disable="false" editable="false" layoutX="64.0" layoutY="48.0" prefWidth="200.0" text="" />
-    <TextField fx:id="port" disable="false" editable="false" layoutX="64.0" layoutY="70.0" opacity="1.0" prefWidth="200.0" />
-    <Label layoutX="36.0" layoutY="103.0" text="Connected:" />
+    <Label layoutX="36.0" layoutY="14.0" prefHeight="19.0" prefWidth="131.0" styleClass="Title" text="Server" />
+    <Label layoutX="36.0" layoutY="51.0" prefWidth="45.0" text="Host: " />
+    <Label layoutX="36.0" layoutY="73.0" prefWidth="45.0" text="Port: " />
+    <TextField fx:id="host" disable="false" editable="false" layoutX="81.0" layoutY="48.0" prefWidth="200.0" text="" />
+    <TextField fx:id="port" disable="false" editable="false" layoutX="81.0" layoutY="70.0" opacity="1.0" prefWidth="200.0" />
+    <Label layoutX="21.0" layoutY="103.0" prefWidth="86.0" text="Connected:" />
     <TextField fx:id="client" disable="false" editable="false" layoutX="106.0" layoutY="100.0" opacity="1.0" prefWidth="200.0" />
     <Button id="connectButton" fx:id="openServerButton" layoutX="38.0" layoutY="130.0" mnemonicParsing="false" onAction="#openServer" text="Open Server" />
     <Label id="Error" fx:id="error" layoutX="227.0" layoutY="135.0" opacity="0.0" text="Error" />
     <ListView fx:id="fileList" layoutX="27.0" layoutY="161.0" prefHeight="118.0" prefWidth="266.0" />
     <Button fx:id="folder" layoutX="38.0" layoutY="297.0" mnemonicParsing="false" onAction="#openFolder" text="Open Folder" />
   </children>
+  <stylesheets>
+    <URL value="@Server.css" />
+  </stylesheets>
 </AnchorPane>
