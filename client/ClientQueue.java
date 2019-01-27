@@ -6,13 +6,12 @@
 package client;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -38,22 +37,22 @@ public class ClientQueue extends Task<String> {
     }
 
     public void serverDownload() throws IOException {
-        DataInputStream fileIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         String fileName = fileList.getSelectionModel().getSelectedItems().get(0);
-        File downloaded = new File(fileName);
+        File downloaded = new File("C:/FileBankReceived/" + fileName);
         System.out.println(fileName);
         out.println(fileName);
         out.flush();
-//        int fileLength;
-//        byte[] b = new byte[fileLength = Integer.parseInt(input.readLine())];
-//        System.out.println(b.length);
-//        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(downloaded));
-//        
-//        bos.write(b, 0, fileLength);
-//        downloaded.renameTo(new File("C:/FileBankReceived/" + fileName));
+        BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
+        int b;
+        byte[] buffer = new byte[1024];
+        OutputStream bos = new FileOutputStream(downloaded);
+        while ((b = bis.read(buffer)) != -1) {
+            bos.write(buffer, 0, b);
+            bos.flush();
+        }
+        bis.close();
+        bos.close();
 
-        //socket.getInputStream().read(b);
-        //fileIn.read(b, 0, 0)
     }
 
     @Override
