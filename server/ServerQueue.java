@@ -28,9 +28,8 @@ public class ServerQueue extends Task {
     protected String call() throws Exception {
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
         BufferedReader clientFile = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-        DataInputStream fileIn = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
         BufferedInputStream br;
+        
         for (String files : files) {
             System.out.println(files);
             out.println(files);
@@ -40,34 +39,20 @@ public class ServerQueue extends Task {
         String fileName;
         File file;
         byte[] bytes;
-        long length;
+        OutputStream os;
+        
         while (true) {
             fileName = clientFile.readLine();
             System.out.println(fileName);
             file = new File("C:/FileBank/" + fileName);
-//            
-//            bytes = new byte[(int)file.length()];
-//            out.println(bytes.length);
-//            br = new BufferedInputStream(new FileInputStream(file));
-//            int b;
-//            int currentBytes = 0;
-//            
-//            while ((b = br.read()) != -1 ){
-//               bytes[currentBytes++] = (byte)b;                
-//            }
-//            
-//            System.out.println(bytes.length);
-//            
-//            for(b=0;b<bytes.length;b++){
-//                clientSocket.getOutputStream().write(bytes[b]);
-//            }
+            bytes = new byte[(int) file.length()];
+            br = new BufferedInputStream(new FileInputStream(file));
+            br.read(bytes, 0, bytes.length);
+            os = clientSocket.getOutputStream();
+            os.write(bytes, 0, bytes.length);
+            os.flush();
 
-//            length = file.length();
-//            if (length <= Long.MAX_VALUE) 
-//                
-//                bytes = new byte[(int) length];
-//                fileOut.write(bytes, 0, (int)length);
-//            }
+            System.out.println("Done");
 
         }
 
