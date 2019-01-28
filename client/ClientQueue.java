@@ -7,6 +7,7 @@ package client;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,12 +44,15 @@ public class ClientQueue extends Task<String> {
         out.println(fileName);
         out.flush();
         BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
+        DataInputStream dis = new DataInputStream(bis);
+        long length = dis.readLong();
         int b;
         byte[] buffer = new byte[1024];
         OutputStream bos = new FileOutputStream(downloaded);
-        while ((b = bis.read(buffer)) != -1) {
+        while (length > 0 && (b = bis.read(buffer,0, (int)Math.min(length, buffer.length))) != -1) {
             bos.write(buffer, 0, b);
             bos.flush();
+            length -= b;
         }
         bis.close();
         bos.close();
