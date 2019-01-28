@@ -26,6 +26,7 @@ public class ServerQueue extends Task {
 
     @Override
     protected String call() throws Exception {
+        
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
         BufferedReader clientFile = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         BufferedInputStream br;
@@ -35,23 +36,27 @@ public class ServerQueue extends Task {
             out.println(files);
             out.flush();
         }
-
+        
         String fileName;
         File file;
         byte[] bytes;
         OutputStream os;
+        DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
         
         while (true) {
             fileName = clientFile.readLine();
             System.out.println(fileName);
             file = new File("C:/FileBank/" + fileName);
             bytes = new byte[(int) file.length()];
+            
             br = new BufferedInputStream(new FileInputStream(file));
             br.read(bytes, 0, bytes.length);
+            dos.writeLong(bytes.length);
+            
             os = clientSocket.getOutputStream();
             os.write(bytes, 0, bytes.length);
             os.flush();
-
+            br.close();
             System.out.println("Done");
 
         }
